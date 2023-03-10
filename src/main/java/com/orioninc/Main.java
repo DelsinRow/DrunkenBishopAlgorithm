@@ -1,25 +1,16 @@
 package com.orioninc;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 public class Main {
     private static final String CACHE_ALGORITHM_MD5 = "MD5";
-    static int iPos = 4;
-    static int jPos = 8;
+    static int Y = 4;
+    static int X = 8;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
-//        String myString = "{\"key\" : \"Some text\"}";
-//        JSONObject job = new JSONObject(myString);
         System.out.print("Please, enter the key: ");
-        String key = inputSomething();
-//        System.out.println(job.get("key"));
+        String key = args[0];
         String fingerprint = fingerprint(keyToMd5(key));
         System.out.println("\nYou entered: " + key);
         printFingerPrint(fingerprint);
@@ -27,17 +18,6 @@ public class Main {
         int[][] array = createField(bitsArray(toBinary(keyToMd5(key))));
         printCaptureArray(graphicKey(array));
 
-    }
-
-    private static String inputSomething() {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String input = null;
-        try {
-            input = reader.readLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return input;
     }
 
     private static byte[] keyToMd5(String plainText) throws NoSuchAlgorithmException {
@@ -98,50 +78,67 @@ public class Main {
                     case "10" -> moveLeftDown(fieldArray);
                     case "11" -> moveRightDown(fieldArray);
                 }
-                fieldArray[iPos][jPos]++;
+                fieldArray[Y][X]++;
             }
         }
         return fieldArray;
     }
 
-    private static void moveLeftUp(int[][] captureArray) { //T == b, L == c, a
-        if (iPos == 0) {
-            if (jPos == 0) ;                     //a
-            else jPos--;                        //T == b
-        } else if (jPos == 0) iPos--;           //c == L
-        else {
-            iPos--;
-            jPos--;
+    private static void moveLeftUp(int[][] captureArray) {
+        if (Y == 0) {
+            if (X == 0) {
+            } else {
+                X--;
+            }
+        } else if (X == 0) {
+            Y--;
+        } else {
+            Y--;
+            X--;
         }
     }
 
-    private static void moveRightUp(int[][] captureArray) { //T == a, R == d, b
-        if (iPos == 0) {
-            if (jPos == 16) ;                    //b
-            else jPos++;                        //a == T
-        } else if (jPos == 16) iPos--;          //d == R
-        else {
-            iPos--;
-            jPos++;
+    private static void moveRightUp(int[][] captureArray) {
+        if (Y == 0) {
+            if (X == 16) {
+            } else {
+                X++;
+            }
+        } else if (X == 16) {
+            Y--;
+        } else {
+            Y--;
+            X++;
         }
     }
 
-    private static void moveLeftDown(int[][] captureArray) { // B==d, L==a,c
-        if (iPos == 8) {
-            if (jPos == 0) ;                     //c
-            else jPos--;                        //d == B
-        } else if (jPos == 0) iPos++;           //a == L
-        else {
-            iPos++;
-            jPos--;
+    private static void moveLeftDown(int[][] captureArray) {
+        if (Y == 8) {
+            if (X == 0) {
+
+            } else {
+                X--;
+            }
+        } else if (X == 0) {
+            Y++;
+        } else {
+            Y++;
+            X--;
         }
     }
 
-    private static void moveRightDown(int[][] captureArray) { //B==c, R==b, d
-        if (iPos == 8) {
-            if (jPos == 16) ;                    //d
-            else jPos++;                        //B == c
-        } else if (jPos == 16) iPos++;           //b == R
+    private static void moveRightDown(int[][] captureArray) {
+        if (Y == 8) {
+            if (X == 16) {
+            } else {
+                X++;
+            }
+        } else if (X == 16) {
+            Y++;
+        } else {
+            Y++;
+            X++;
+        }
     }
 
     private static char[][] graphicKey(int[][] intArray) {
@@ -168,7 +165,7 @@ public class Main {
             }
         }
         graphicKey[4][8] = 'S';
-        graphicKey[iPos][jPos] = 'E';
+        graphicKey[Y][X] = 'E';
 
         return graphicKey;
     }
