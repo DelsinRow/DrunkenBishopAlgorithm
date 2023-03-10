@@ -9,7 +9,6 @@ public class Main {
     static int X = 8;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        System.out.print("Please, enter the key: ");
         String key = args[0];
         String fingerprint = fingerprint(keyToMd5(key));
         System.out.println("\nYou entered: " + key);
