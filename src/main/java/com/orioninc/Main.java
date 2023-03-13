@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Main {
-    private static final String CACHE_ALGORITHM_MD5 = "MD5";
+    private static final String HASH_ALGORITHM_MD5 = "MD5";
     static int Y = 4;
     static int X = 8;
 
@@ -13,14 +13,13 @@ public class Main {
         String fingerprint = fingerprint(keyToMd5(key));
         System.out.println("\nYou entered: " + key);
         printFingerPrint(fingerprint);
-//        System.out.println("Bits array: " + Arrays.deepToString(bitsArray(toBinary(keyToMd5(key)))));
         int[][] array = createField(bitsArray(toBinary(keyToMd5(key))));
         printCaptureArray(graphicKey(array));
 
     }
 
     private static byte[] keyToMd5(String plainText) throws NoSuchAlgorithmException {
-        MessageDigest md5 = MessageDigest.getInstance(CACHE_ALGORITHM_MD5);
+        MessageDigest md5 = MessageDigest.getInstance(HASH_ALGORITHM_MD5);
         return md5.digest(plainText.getBytes());
     }
 
@@ -85,8 +84,7 @@ public class Main {
 
     private static void moveLeftUp(int[][] captureArray) {
         if (Y == 0) {
-            if (X == 0) {
-            } else {
+            if (X != 0) {
                 X--;
             }
         } else if (X == 0) {
@@ -99,8 +97,7 @@ public class Main {
 
     private static void moveRightUp(int[][] captureArray) {
         if (Y == 0) {
-            if (X == 16) {
-            } else {
+            if (X != 16) {
                 X++;
             }
         } else if (X == 16) {
@@ -113,9 +110,7 @@ public class Main {
 
     private static void moveLeftDown(int[][] captureArray) {
         if (Y == 8) {
-            if (X == 0) {
-
-            } else {
+            if (X != 0) {
                 X--;
             }
         } else if (X == 0) {
@@ -128,8 +123,7 @@ public class Main {
 
     private static void moveRightDown(int[][] captureArray) {
         if (Y == 8) {
-            if (X == 16) {
-            } else {
+            if (X != 16) {
                 X++;
             }
         } else if (X == 16) {
@@ -141,25 +135,30 @@ public class Main {
     }
 
     private static char[][] graphicKey(int[][] intArray) {
+        char[] charArray = new char[15];
+        charArray[0] = ' ';
+        charArray[1] = '.';
+        charArray[2] = 'o';
+        charArray[3] = '+';
+        charArray[4] = '=';
+        charArray[5] = '*';
+        charArray[6] = 'B';
+        charArray[7] = 'O';
+        charArray[8] = 'X';
+        charArray[9] = '@';
+        charArray[10] = '%';
+        charArray[11] = '&';
+        charArray[12] = '#';
+        charArray[13] = '/';
+        charArray[14] = '^';
+
         char[][] graphicKey = new char[9][17];
         for (int i = 0; i < intArray.length; i++) {
             for (int j = 0; j < intArray[i].length; j++) {
-                switch (intArray[i][j]) {
-                    case 0 -> graphicKey[i][j] = ' ';
-                    case 1 -> graphicKey[i][j] = '.';
-                    case 2 -> graphicKey[i][j] = 'o';
-                    case 3 -> graphicKey[i][j] = '+';
-                    case 4 -> graphicKey[i][j] = '=';
-                    case 5 -> graphicKey[i][j] = '*';
-                    case 6 -> graphicKey[i][j] = 'B';
-                    case 7 -> graphicKey[i][j] = 'O';
-                    case 8 -> graphicKey[i][j] = 'X';
-                    case 9 -> graphicKey[i][j] = '@';
-                    case 10 -> graphicKey[i][j] = '%';
-                    case 11 -> graphicKey[i][j] = '&';
-                    case 12 -> graphicKey[i][j] = '#';
-                    case 13 -> graphicKey[i][j] = '/';
-                    case 14 -> graphicKey[i][j] = '^';
+                for (int k = 0; k < charArray.length; k++) {
+                    if (k == intArray[i][j]) {
+                        graphicKey[i][j] = charArray[k];
+                    }
                 }
             }
         }
@@ -170,7 +169,7 @@ public class Main {
     }
 
     private static void printCaptureArray(char[][] array) {
-        System.out.println("+-----RSA Key-----+");
+        System.out.println("+---Fingerprint---+");
         for (char[] a : array) {
             System.out.print("|");
             for (int i = 0; i < a.length; i++) {
